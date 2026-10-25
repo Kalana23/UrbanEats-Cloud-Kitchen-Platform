@@ -1,0 +1,12 @@
+{
+    "name": "urbaneats/cloud-kitchen-platform",
+    "description": "UrbanEats Cloud Kitchen Platform",
+    "type": "project",
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^4.0"
+    },
+    "scripts": {
+        "phpcs": "phpcs",
+        "phpcbf": "phpcbf"
+    }
+}
