@@ -112,6 +112,25 @@ The database script is located at [`database/component_a.sql`](database/componen
 - Change user roles with self-demotion protection.
 - View and filter audit log events joined with the `users` table with server-side pagination.
 
+### 9. Component B: Menu, Catalogue & Inventory
+- **Database Schema ([`database/component_b.sql`](database/component_b.sql))**: 4 3NF normalized tables: `categories`, `dishes`, `inventory`, and `stock_movements`.
+  - Includes 6 Sri Lankan food categories, 22 dishes with LKR pricing and images, 22 inventory tracking rows (with low-stock and out-of-stock cases), and 25 stock movement audit records.
+- **Transaction-Safe Stock Reduction ([`includes/stock.php`](includes/stock.php))**:
+  - `reduce_stock($pdo, $dish_id, $qty, $user_id)`: Atomic conditional UPDATE (`current_stock = current_stock - :qty WHERE current_stock >= :qty`) preventing negative inventory, logging movement as `'order'`.
+  - `record_stock_adjustment()`: Staff restocking and wastage logging.
+- **Kitchen Stock Dashboard ([`public/menu/stock.php`](public/menu/stock.php))**:
+  - Protected by `require_role(['Kitchen Staff', 'Administrator'])`.
+  - Highlights Out-of-Stock (`current_stock = 0`) and Low-Stock (`current_stock <= reorder_level`) items.
+  - CSRF-protected Restock and Wastage adjustment form with staff attribution and audit logging.
+- **Staff Dish & Category CRUD**:
+  - Category Management ([`public/menu/manage-categories.php`](public/menu/manage-categories.php)): Add, edit, and soft-delete categories.
+  - Dish Management ([`public/menu/manage-dishes.php`](public/menu/manage-dishes.php)): Add, edit, and soft-delete dishes with secure image upload (validating JPG/PNG/WEBP extension, `finfo_file` MIME check, 2MB size limit, and randomized filenames).
+- **Public Menu & Ordering Flow**:
+  - Landing Page ([`public/index.php`](public/index.php)): Featured categories, chef highlights, and cloud kitchen value pillars.
+  - Menu Catalog ([`public/menu/list.php`](public/menu/list.php)): Category tabs, keyword search, whitelisted sorting (`price_asc`, `price_desc`, `name_asc`, `name_desc`), availability filter, and server-side pagination.
+  - Dish Detail ([`public/menu/detail.php`](public/menu/detail.php)): High-resolution imagery, portion pricing, stock status indicators, and Add-to-Cart form.
+  - Cart Integration ([`public/orders/cart.php`](public/orders/cart.php)): Session-based cart with server-side database price re-verification.
+
 ---
 
 ## 🛠️ Installation & Setup
@@ -119,12 +138,15 @@ The database script is located at [`database/component_a.sql`](database/componen
 1. Start **Apache** and **MySQL** in XAMPP.
 2. Verify that the project is in `c:/xampp/htdocs/UrbanEats-Cloud-Kitchen-Platform/`.
 3. Import the database schema and seed data:
-   - Option A: Open `http://localhost/phpmyadmin/` and import `database/component_a.sql`.
+   - Option A: Open `http://localhost/phpmyadmin/` and import:
+     - `database/component_a.sql` (Component A)
+     - `database/component_b.sql` (Component B)
    - Option B: Run via command line:
      ```bash
      mysql -u root urbaneats_db < database/component_a.sql
+     mysql -u root urbaneats_db < database/component_b.sql
      ```
 4. Access the platform in your browser:
    ```text
-   http://localhost/UrbanEats-Cloud-Kitchen-Platform/public/login.php
+   http://localhost/UrbanEats-Cloud-Kitchen-Platform/public/index.php
    ```

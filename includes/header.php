@@ -56,29 +56,29 @@ $navItems = [];
 switch ($userRole) {
     case 'Customer':
         $navItems = [
-            ['label' => 'Browse Menu', 'url' => $webRoot . '/menu.php', 'icon' => 'dish'],
-            ['label' => 'My Orders',   'url' => $webRoot . '/orders.php', 'icon' => 'receipt'],
-            ['label' => 'Cart',        'url' => $webRoot . '/cart.php', 'icon' => 'cart'],
+            ['label' => 'Browse Menu', 'url' => $webRoot . '/menu/list.php', 'icon' => 'dish'],
+            ['label' => 'Cart',        'url' => $webRoot . '/orders/cart.php', 'icon' => 'cart'],
+            ['label' => 'My Orders',   'url' => $webRoot . '/orders/history.php', 'icon' => 'receipt'],
             ['label' => 'Profile',     'url' => $webRoot . '/profile.php', 'icon' => 'user'],
         ];
         break;
 
     case 'Kitchen Staff':
         $navItems = [
-            ['label' => 'Active Orders', 'url' => $webRoot . '/kitchen/orders.php', 'icon' => 'flame'],
-            ['label' => 'Prep Queue',    'url' => $webRoot . '/kitchen/queue.php', 'icon' => 'clock'],
-            ['label' => 'Stock Status',  'url' => $webRoot . '/kitchen/inventory.php', 'icon' => 'box'],
-            ['label' => 'Staff Profile', 'url' => $webRoot . '/profile.php', 'icon' => 'user'],
+            ['label' => 'Stock Dashboard', 'url' => $webRoot . '/menu/stock.php', 'icon' => 'box'],
+            ['label' => 'Manage Dishes',   'url' => $webRoot . '/menu/manage-dishes.php', 'icon' => 'dish'],
+            ['label' => 'Categories',      'url' => $webRoot . '/menu/manage-categories.php', 'icon' => 'kitchen'],
+            ['label' => 'Staff Profile',   'url' => $webRoot . '/profile.php', 'icon' => 'user'],
         ];
         break;
 
     case 'Administrator':
         $navItems = [
-            ['label' => 'Dashboard',    'url' => $webRoot . '/admin/dashboard.php', 'icon' => 'chart'],
-            ['label' => 'Manage Users', 'url' => $webRoot . '/admin/users.php', 'icon' => 'users'],
-            ['label' => 'All Orders',   'url' => $webRoot . '/admin/orders.php', 'icon' => 'receipt'],
-            ['label' => 'Stations',     'url' => $webRoot . '/admin/stations.php', 'icon' => 'kitchen'],
-            ['label' => 'Audit Logs',   'url' => $webRoot . '/admin/audit-logs.php', 'icon' => 'shield'],
+            ['label' => 'Manage Users',    'url' => $webRoot . '/admin/users.php', 'icon' => 'users'],
+            ['label' => 'Stock Control',   'url' => $webRoot . '/menu/stock.php', 'icon' => 'box'],
+            ['label' => 'Manage Dishes',   'url' => $webRoot . '/menu/manage-dishes.php', 'icon' => 'dish'],
+            ['label' => 'Audit Logs',      'url' => $webRoot . '/admin/audit-log.php', 'icon' => 'shield'],
+            ['label' => 'Browse Menu',     'url' => $webRoot . '/menu/list.php', 'icon' => 'receipt'],
         ];
         break;
 
@@ -86,8 +86,7 @@ switch ($userRole) {
     default:
         $navItems = [
             ['label' => 'Home',        'url' => $webRoot . '/index.php', 'icon' => 'home'],
-            ['label' => 'Browse Menu', 'url' => $webRoot . '/menu.php', 'icon' => 'dish'],
-            ['label' => 'About Kitchens', 'url' => $webRoot . '/about.php', 'icon' => 'info'],
+            ['label' => 'Browse Menu', 'url' => $webRoot . '/menu/list.php', 'icon' => 'dish'],
         ];
         break;
 }

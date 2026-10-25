@@ -2,21 +2,24 @@
 /**
  * UrbanEats Cloud Kitchen Platform
  * Database Connection Configuration (PHP 8.x)
+ *
+ * Configured for local XAMPP environment.
  */
 
 declare(strict_types=1);
 
-// Database configuration variables
-$host = 'localhost';
-$dbname = 'urbaneats_db';
-$user = 'root';
+// Database connection parameters
+$host     = 'localhost';
+$port     = 3306;
+$dbname   = 'urbaneats_db';
+$user     = 'root';
 $password = '';
-$charset = 'utf8mb4';
+$charset  = 'utf8mb4';
 
 // Data Source Name (DSN)
-$dsn = "mysql:host={$host};dbname={$dbname};charset={$charset}";
+$dsn = "mysql:host={$host};port={$port};dbname={$dbname};charset={$charset}";
 
-// PDO options for security and error handling
+// Secure PDO driver attributes
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -24,13 +27,15 @@ $options = [
 ];
 
 try {
-    // Create a new PDO instance
+    // Initialize PDO connection
     $pdo = new PDO($dsn, $user, $password, $options);
 } catch (PDOException $e) {
-    // Log sensitive error details to the server error log
-    error_log('Database Connection Error: ' . $e->getMessage());
+    // Gracefully handle database connection errors without leaking sensitive credentials or stack traces
+    error_log('[UrbanEats Database Error] Connection failed: ' . $e->getMessage());
 
-    // Prevent sensitive database error details from being printed to the screen
-    http_response_code(500);
-    exit('Database connection error. Please try again later.');
+    if (!headers_sent()) {
+        http_response_code(500);
+    }
+
+    exit('Database connection error. A technical incident has been logged. Please try again later.');
 }
