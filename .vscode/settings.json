@@ -1,0 +1,7 @@
+{
+    "phpcs.enable": true,
+    "phpcs.executablePath": "vendor\\bin\\phpcs.bat",
+    "phpcbf.enable": true,
+    "phpcbf.executablePath": "vendor\\bin\\phpcbf.bat",
+    "phpResolver.phpSnifferCommand": "vendor\\bin\\phpcs.bat"
+}
