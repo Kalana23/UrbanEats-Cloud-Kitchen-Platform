@@ -39,3 +39,13 @@ CREATE TABLE audit_log (
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE
     SET NULL
 );
+-- 5. password_resets Table 
+CREATE TABLE IF NOT EXISTS password_resets (
+    reset_id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(150) NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX (email),
+    INDEX (token)
+);
