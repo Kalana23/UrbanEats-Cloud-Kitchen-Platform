@@ -1,0 +1,15 @@
+[2026-10-25 10:30:47 CET] [TEST] [Ref: ERR-C640DF3B] [IP: CLI] [URI: CLI]
+Message: Sample error message for testing
+Location: C:\Users\kalan\.gemini\antigravity-ide\brain\92dd4b35-4b3b-4da8-bf0b-a3d1fc6aae9e\scratch\test_shared_helpers.php:23
+--------------------------------------------------------------------------------
+[2026-10-25 10:30:47 CET] [EXCEPTION] [Ref: ERR-6649FF83] [IP: CLI] [URI: CLI]
+Message: [AssertionError] Output displays role badge for Customer
+Location: C:\Users\kalan\.gemini\antigravity-ide\brain\92dd4b35-4b3b-4da8-bf0b-a3d1fc6aae9e\scratch\test_shared_helpers.php:49
+Stack Trace:
+#0 C:\Users\kalan\.gemini\antigravity-ide\brain\92dd4b35-4b3b-4da8-bf0b-a3d1fc6aae9e\scratch\test_shared_helpers.php(49): assert(false, 'Output displays...')
+#1 {main}
+--------------------------------------------------------------------------------
+[2026-10-25 10:31:27 CET] [TEST] [Ref: ERR-29CF404F] [IP: CLI] [URI: CLI]
+Message: Sample error message for testing
+Location: C:\Users\kalan\.gemini\antigravity-ide\brain\92dd4b35-4b3b-4da8-bf0b-a3d1fc6aae9e\scratch\test_csrf_error.php:23
+--------------------------------------------------------------------------------

@@ -85,8 +85,10 @@ function require_role(array|string $allowed_roles_array, string $redirect_url = 
             exit();
         }
 
-        http_response_code(403);
-        exit('Access Denied: You do not have permission to access this resource.');
+        // Redirect to shared platform 403 Access Denied page
+        $access_denied_target = '/UrbanEats-Cloud-Kitchen-Platform/public/access-denied.php';
+        header("Location: {$access_denied_target}");
+        exit();
     }
 }
 
