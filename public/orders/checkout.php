@@ -464,6 +464,13 @@ require_once __DIR__ . '/../../includes/header.php';
     </div>
 
     <!-- Alert Notifications Feedback -->
+    <?php if (!empty($_SESSION['checkout_error'])): ?>
+        <div class="alert alert-danger" style="margin-bottom: 1.75rem;">
+            <strong>Checkout Error:</strong> <?= htmlspecialchars($_SESSION['checkout_error'], ENT_QUOTES, 'UTF-8'); ?>
+        </div>
+        <?php unset($_SESSION['checkout_error']); ?>
+    <?php endif; ?>
+
     <?php if (!empty($feedbackAlert)): ?>
         <div class="alert alert-<?= htmlspecialchars($feedbackAlert['type'], ENT_QUOTES, 'UTF-8'); ?>" style="margin-bottom: 1.75rem; display: flex; align-items: center; gap: 0.75rem;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
@@ -488,7 +495,7 @@ require_once __DIR__ . '/../../includes/header.php';
 
         <!-- LEFT COLUMN: Checkout Form Inputs -->
         <div>
-            <form action="checkout.php" method="POST" id="checkoutForm">
+            <form action="process-checkout.php" method="POST" id="checkoutForm">
                 <?= csrf_field(); ?>
                 <input type="hidden" name="action" value="place_order">
 
