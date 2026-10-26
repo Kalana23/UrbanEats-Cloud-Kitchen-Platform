@@ -1,8 +1,9 @@
 <?php
+
 /**
  * UrbanEats Cloud Kitchen Platform
  * CSRF Protection Utilities
- * 
+ *
  * PHP version 8.x
  */
 
@@ -18,7 +19,8 @@ if (session_status() === PHP_SESSION_NONE) {
  *
  * @return string The newly generated 64-character hex token.
  */
-function generate_csrf_token(): string {
+function generate_csrf_token(): string
+{
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
@@ -32,7 +34,8 @@ function generate_csrf_token(): string {
  *
  * @return string
  */
-function get_csrf_token(): string {
+function get_csrf_token(): string
+{
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
@@ -47,7 +50,8 @@ function get_csrf_token(): string {
  *
  * @return string
  */
-function csrf_token(): string {
+function csrf_token(): string
+{
     return get_csrf_token();
 }
 
@@ -57,7 +61,8 @@ function csrf_token(): string {
  *
  * @return string Safe HTML input string.
  */
-function csrf_field(): string {
+function csrf_field(): string
+{
     $token = htmlspecialchars(get_csrf_token(), ENT_QUOTES, 'UTF-8');
     return '<input type="hidden" name="csrf_token" value="' . $token . '">';
 }
@@ -67,7 +72,8 @@ function csrf_field(): string {
  *
  * @return string
  */
-function csrf_meta(): string {
+function csrf_meta(): string
+{
     $token = htmlspecialchars(get_csrf_token(), ENT_QUOTES, 'UTF-8');
     return '<meta name="csrf-token" content="' . $token . '">';
 }
@@ -79,7 +85,8 @@ function csrf_meta(): string {
  *                           or the X-CSRF-TOKEN HTTP request header.
  * @return bool True if valid, false otherwise.
  */
-function validate_csrf_token(?string $token = null): bool {
+function validate_csrf_token(?string $token = null): bool
+{
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
@@ -91,8 +98,8 @@ function validate_csrf_token(?string $token = null): bool {
 
     // If no explicit token provided, look up from POST body or HTTP headers
     if ($token === null) {
-        $token = $_POST['csrf_token'] 
-            ?? $_SERVER['HTTP_X_CSRF_TOKEN'] 
+        $token = $_POST['csrf_token']
+            ?? $_SERVER['HTTP_X_CSRF_TOKEN']
             ?? null;
     }
 
@@ -110,7 +117,8 @@ function validate_csrf_token(?string $token = null): bool {
  * @param string $error_message Optional message to display upon failure.
  * @return void
  */
-function verify_csrf_or_abort(string $error_message = 'Security check failed: Invalid or expired CSRF token. Please refresh the page and try again.'): void {
+function verify_csrf_or_abort(string $error_message = 'Security check failed: Invalid or expired CSRF token. Please refresh the page and try again.'): void
+{
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!validate_csrf_token()) {
             http_response_code(403);
@@ -128,6 +136,7 @@ function verify_csrf_or_abort(string $error_message = 'Security check failed: In
  *
  * @return string
  */
-function regenerate_csrf_token(): string {
+function regenerate_csrf_token(): string
+{
     return generate_csrf_token();
 }

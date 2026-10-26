@@ -1,8 +1,9 @@
 <?php
+
 /**
  * UrbanEats Cloud Kitchen Platform
  * User Authentication & Login Page
- * 
+ *
  * PHP version 8.x
  */
 
@@ -39,7 +40,8 @@ $lockoutRemainingMinutes = 0;
  * Check login throttling status for the given email and client IP.
  * Returns array: ['locked' => bool, 'remaining_minutes' => int]
  */
-function check_login_throttling(PDO $pdo, string $email, string $ip): array {
+function check_login_throttling(PDO $pdo, string $email, string $ip): array
+{
     try {
         // Find timestamp of last successful login for this email/IP
         $lastSuccessStmt = $pdo->prepare('
@@ -95,7 +97,8 @@ function check_login_throttling(PDO $pdo, string $email, string $ip): array {
 /**
  * Record a login attempt in the login_attempts table.
  */
-function record_login_attempt(PDO $pdo, string $email, string $ip, bool $isSuccessful): void {
+function record_login_attempt(PDO $pdo, string $email, string $ip, bool $isSuccessful): void
+{
     try {
         $stmt = $pdo->prepare('
             INSERT INTO login_attempts (email, ip_address, is_successful, attempt_time)
@@ -164,7 +167,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Verify password using password_verify
             if ($user && password_verify($password, (string)$user['password_hash'])) {
-                
                 // Check if account is active
                 if ((int)$user['is_active'] !== 1) {
                     record_login_attempt($pdo, $email, $clientIp, false);
@@ -182,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['role']      = (string)$user['role_name'];
                     $_SESSION['role_name'] = (string)$user['role_name'];
                     $_SESSION['username']  = (string)$user['username'];
-                    $_SESSION['first_name']= (string)$user['first_name'];
+                    $_SESSION['first_name'] = (string)$user['first_name'];
                     $_SESSION['last_name'] = (string)$user['last_name'];
                     $_SESSION['email']     = (string)$user['email'];
 
@@ -394,20 +396,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </header>
 
         <!-- Informational Messages -->
-        <?php if (isset($_GET['registered'])): ?>
+        <?php if (isset($_GET['registered'])) : ?>
             <div class="alert alert-success" role="alert">
                 Account created successfully! Please sign in with your credentials.
             </div>
         <?php endif; ?>
 
-        <?php if (isset($_GET['logged_out'])): ?>
+        <?php if (isset($_GET['logged_out'])) : ?>
             <div class="alert alert-info" role="alert">
                 You have been signed out safely. See you soon!
             </div>
         <?php endif; ?>
 
         <!-- Throttling Lockout Alert -->
-        <?php if (isset($errors['throttled'])): ?>
+        <?php if (isset($errors['throttled'])) : ?>
             <div class="alert alert-danger" role="alert">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;">
                     <circle cx="12" cy="12" r="10"></circle>
@@ -419,19 +421,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <!-- General / Auth / CSRF Errors -->
-        <?php if (isset($errors['auth'])): ?>
+        <?php if (isset($errors['auth'])) : ?>
             <div class="alert alert-danger" role="alert">
                 <?= htmlspecialchars($errors['auth'], ENT_QUOTES, 'UTF-8'); ?>
             </div>
         <?php endif; ?>
 
-        <?php if (isset($errors['csrf'])): ?>
+        <?php if (isset($errors['csrf'])) : ?>
             <div class="alert alert-danger" role="alert">
                 <?= htmlspecialchars($errors['csrf'], ENT_QUOTES, 'UTF-8'); ?>
             </div>
         <?php endif; ?>
 
-        <?php if (isset($errors['system'])): ?>
+        <?php if (isset($errors['system'])) : ?>
             <div class="alert alert-danger" role="alert">
                 <?= htmlspecialchars($errors['system'], ENT_QUOTES, 'UTF-8'); ?>
             </div>
@@ -465,7 +467,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                     </svg>
                 </div>
-                <?php if (isset($errors['email'])): ?>
+                <?php if (isset($errors['email'])) : ?>
                     <span style="color: var(--danger); font-size: 0.8125rem;"><?= htmlspecialchars($errors['email'], ENT_QUOTES, 'UTF-8'); ?></span>
                 <?php endif; ?>
             </div>
@@ -499,7 +501,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </svg>
                     </button>
                 </div>
-                <?php if (isset($errors['password'])): ?>
+                <?php if (isset($errors['password'])) : ?>
                     <span style="color: var(--danger); font-size: 0.8125rem;"><?= htmlspecialchars($errors['password'], ENT_QUOTES, 'UTF-8'); ?></span>
                 <?php endif; ?>
             </div>

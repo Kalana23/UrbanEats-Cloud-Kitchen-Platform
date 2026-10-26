@@ -1,8 +1,9 @@
 <?php
+
 /**
  * UrbanEats Cloud Kitchen Platform
  * Authentication, Session Management, and Access Control
- * 
+ *
  * PHP version 8.x
  */
 
@@ -18,7 +19,8 @@ if (session_status() === PHP_SESSION_NONE) {
  *
  * @return bool True if $_SESSION['user_id'] exists and is not empty.
  */
-function is_logged_in(): bool {
+function is_logged_in(): bool
+{
     return isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 }
 
@@ -29,7 +31,8 @@ function is_logged_in(): bool {
  * @param string $login_url The destination URL for unauthenticated users.
  * @return void
  */
-function require_login(string $login_url = 'login.php'): void {
+function require_login(string $login_url = 'login.php'): void
+{
     if (!is_logged_in()) {
         header("Location: {$login_url}");
         exit();
@@ -44,7 +47,8 @@ function require_login(string $login_url = 'login.php'): void {
  * @param array|string $allowed_roles_array List of permitted roles or single role name/id.
  * @return bool True if the user's role matches any permitted role.
  */
-function has_role(array|string $allowed_roles_array): bool {
+function has_role(array|string $allowed_roles_array): bool
+{
     if (!is_logged_in()) {
         return false;
     }
@@ -76,7 +80,8 @@ function has_role(array|string $allowed_roles_array): bool {
  * @param string $redirect_url Optional redirection URL instead of 403 response.
  * @return void
  */
-function require_role(array|string $allowed_roles_array, string $redirect_url = ''): void {
+function require_role(array|string $allowed_roles_array, string $redirect_url = ''): void
+{
     require_login();
 
     if (!has_role($allowed_roles_array)) {
@@ -135,7 +140,8 @@ function log_action(
  * @param string $redirect_url Redirection destination after logout.
  * @return void
  */
-function logout_user(string $redirect_url = 'login.php'): void {
+function logout_user(string $redirect_url = 'login.php'): void
+{
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }

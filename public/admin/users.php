@@ -1,8 +1,9 @@
 <?php
+
 /**
  * UrbanEats Cloud Kitchen Platform
  * Administrator User Management Dashboard
- * 
+ *
  * PHP version 8.x
  */
 
@@ -49,7 +50,6 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             if (!$targetUser) {
                 $errorMessage = 'The requested user could not be found.';
             } else {
-
                 // Action A: Toggle Account Active/Inactive Status
                 if ($action === 'toggle_status') {
                     $newStatus = ((int)$targetUser['is_active'] === 1) ? 0 : 1;
@@ -63,16 +63,17 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                             $stmt->execute([':status' => $newStatus, ':id' => $targetUserId]);
 
                             $statusLabel = ($newStatus === 1) ? 'Activated' : 'Deactivated';
-                            
+
                             // Log the admin action in audit_log
                             log_action(
                                 $pdo,
                                 $adminUserId,
                                 'USER_STATUS_CHANGE',
-                                sprintf("Administrator '%s' %s account for user '%s' (#%d).", 
-                                    $adminUsername, 
-                                    strtolower($statusLabel), 
-                                    $targetUser['username'], 
+                                sprintf(
+                                    "Administrator '%s' %s account for user '%s' (#%d).",
+                                    $adminUsername,
+                                    strtolower($statusLabel),
+                                    $targetUser['username'],
                                     $targetUserId
                                 )
                             );
@@ -110,7 +111,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                                 $pdo,
                                 $adminUserId,
                                 'USER_ROLE_CHANGE',
-                                sprintf("Administrator '%s' updated role of '%s' (#%d) from '%s' to '%s'.",
+                                sprintf(
+                                    "Administrator '%s' updated role of '%s' (#%d) from '%s' to '%s'.",
                                     $adminUsername,
                                     $targetUser['username'],
                                     $targetUserId,
@@ -215,7 +217,7 @@ require_once __DIR__ . '/../../includes/header.php';
     </div>
 
     <!-- Alert Notifications -->
-    <?php if (!empty($successMessage)): ?>
+    <?php if (!empty($successMessage)) : ?>
         <div class="alert alert-success" role="alert">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;">
                 <polyline points="20 6 9 17 4 12"></polyline>
@@ -224,7 +226,7 @@ require_once __DIR__ . '/../../includes/header.php';
         </div>
     <?php endif; ?>
 
-    <?php if (!empty($errorMessage)): ?>
+    <?php if (!empty($errorMessage)) : ?>
         <div class="alert alert-danger" role="alert">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;">
                 <circle cx="12" cy="12" r="10"></circle>
@@ -296,7 +298,7 @@ require_once __DIR__ . '/../../includes/header.php';
                 <label for="role_filter" class="form-label" style="font-size: 0.8125rem;">Filter by Role</label>
                 <select id="role_filter" name="role_filter" class="form-control">
                     <option value="0">All Roles</option>
-                    <?php foreach ($allRoles as $r): ?>
+                    <?php foreach ($allRoles as $r) : ?>
                         <option value="<?= (int)$r['role_id']; ?>" <?= ($filterRoleId === (int)$r['role_id']) ? 'selected' : ''; ?>>
                             <?= htmlspecialchars($r['role_name'], ENT_QUOTES, 'UTF-8'); ?>
                         </option>
@@ -319,7 +321,7 @@ require_once __DIR__ . '/../../includes/header.php';
                 <button type="submit" class="btn btn-primary" style="height: 42px;">
                     Filter Users
                 </button>
-                <?php if ($searchKeyword !== '' || $filterRoleId > 0 || $filterStatus !== 'all'): ?>
+                <?php if ($searchKeyword !== '' || $filterRoleId > 0 || $filterStatus !== 'all') : ?>
                     <a href="users.php" class="btn btn-secondary" style="height: 42px;">
                         Reset
                     </a>
@@ -355,24 +357,24 @@ require_once __DIR__ . '/../../includes/header.php';
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if (empty($users)): ?>
+                    <?php if (empty($users)) : ?>
                         <tr>
                             <td colspan="7" style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
                                 No users matched your search criteria.
                             </td>
                         </tr>
-                    <?php else: ?>
-                        <?php foreach ($users as $u): ?>
-                            <?php 
+                    <?php else : ?>
+                        <?php foreach ($users as $u) : ?>
+                            <?php
                                 $isSelf = ($u['user_id'] === $adminUserId);
                                 $statusBadgeClass = ($u['is_active'] == 1) ? 'badge-customer' : 'badge-guest';
-                                
+
                                 $rBadge = match (strtolower((string)$u['role_name'])) {
                                     'admin', 'administrator' => 'badge-admin',
                                     'staff', 'kitchen staff' => 'badge-staff',
                                     default                  => 'badge-customer',
                                 };
-                            ?>
+    ?>
                             <tr>
                                 <td style="font-family: monospace; font-weight: 700;">
                                     #<?= (int)$u['user_id']; ?>
@@ -381,7 +383,7 @@ require_once __DIR__ . '/../../includes/header.php';
                                 <td>
                                     <div style="font-weight: 700; color: var(--text-primary);">
                                         <?= htmlspecialchars($u['first_name'] . ' ' . $u['last_name'], ENT_QUOTES, 'UTF-8'); ?>
-                                        <?php if ($isSelf): ?>
+                                        <?php if ($isSelf) : ?>
                                             <span style="font-size: 0.7rem; background: rgba(249,115,22,0.2); color: var(--primary); padding: 1px 6px; border-radius: 4px; margin-left: 4px;">You</span>
                                         <?php endif; ?>
                                     </div>
@@ -410,7 +412,7 @@ require_once __DIR__ . '/../../includes/header.php';
                                             onchange="if(confirm('Change role for <?= htmlspecialchars($u['username'], ENT_QUOTES, 'UTF-8'); ?>?')) { this.form.submit(); } else { this.value = '<?= (int)$u['role_id']; ?>'; }"
                                             <?= $isSelf ? 'title="Self-demotion disabled" disabled' : ''; ?>
                                         >
-                                            <?php foreach ($allRoles as $roleOption): ?>
+                                            <?php foreach ($allRoles as $roleOption) : ?>
                                                 <option value="<?= (int)$roleOption['role_id']; ?>" <?= ((int)$u['role_id'] === (int)$roleOption['role_id']) ? 'selected' : ''; ?>>
                                                     <?= htmlspecialchars($roleOption['role_name'], ENT_QUOTES, 'UTF-8'); ?>
                                                 </option>
@@ -421,9 +423,9 @@ require_once __DIR__ . '/../../includes/header.php';
 
                                 <!-- Status Column -->
                                 <td>
-                                    <?php if ((int)$u['is_active'] === 1): ?>
+                                    <?php if ((int)$u['is_active'] === 1) : ?>
                                         <span class="role-badge badge-customer">Active</span>
-                                    <?php else: ?>
+                                    <?php else : ?>
                                         <span class="role-badge" style="background: rgba(244,63,94,0.15); color: #fb7185; border: 1px solid rgba(244,63,94,0.3);">
                                             Deactivated
                                         </span>
@@ -443,7 +445,7 @@ require_once __DIR__ . '/../../includes/header.php';
                                         <input type="hidden" name="action" value="toggle_status">
                                         <input type="hidden" name="target_user_id" value="<?= (int)$u['user_id']; ?>">
 
-                                        <?php if ((int)$u['is_active'] === 1): ?>
+                                        <?php if ((int)$u['is_active'] === 1) : ?>
                                             <button 
                                                 type="submit" 
                                                 class="btn btn-sm btn-danger" 
@@ -452,7 +454,7 @@ require_once __DIR__ . '/../../includes/header.php';
                                             >
                                                 Deactivate
                                             </button>
-                                        <?php else: ?>
+                                        <?php else : ?>
                                             <button 
                                                 type="submit" 
                                                 class="btn btn-sm btn-secondary" 

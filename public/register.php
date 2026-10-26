@@ -1,4 +1,5 @@
 <?php
+
 /**
  * UrbanEats Cloud Kitchen Platform
  * Customer Account Registration Page (PHP 8.x)
@@ -158,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Set success state
             $success_message = "Welcome to UrbanEats, {$first_name}! Your customer account has been created successfully.";
-            
+
             // Clear form data
             $form_data = [
                 'first_name' => '',
@@ -638,7 +639,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p class="auth-subtitle">Join us to order chef-crafted dishes from our premier cloud kitchens</p>
         </header>
 
-        <?php if (!empty($success_message)): ?>
+        <?php if (!empty($success_message)) : ?>
             <!-- Success Display State -->
             <div class="success-box">
                 <div class="success-icon-wrap">
@@ -654,10 +655,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     Proceed to Login &rarr;
                 </a>
             </div>
-        <?php else: ?>
-
+        <?php else : ?>
             <!-- General Alert / CSRF / System Error -->
-            <?php if (isset($errors['csrf'])): ?>
+            <?php if (isset($errors['csrf'])) : ?>
                 <div class="alert alert-error" role="alert">
                     <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>
@@ -666,7 +666,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             <?php endif; ?>
 
-            <?php if (isset($errors['system'])): ?>
+            <?php if (isset($errors['system'])) : ?>
                 <div class="alert alert-error" role="alert">
                     <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>
@@ -705,7 +705,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <circle cx="12" cy="7" r="4"></circle>
                             </svg>
                         </div>
-                        <?php if (isset($errors['first_name'])): ?>
+                        <?php if (isset($errors['first_name'])) : ?>
                             <span class="field-error"><?= htmlspecialchars($errors['first_name'], ENT_QUOTES, 'UTF-8'); ?></span>
                         <?php endif; ?>
                     </div>
@@ -732,7 +732,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <circle cx="12" cy="7" r="4"></circle>
                             </svg>
                         </div>
-                        <?php if (isset($errors['last_name'])): ?>
+                        <?php if (isset($errors['last_name'])) : ?>
                             <span class="field-error"><?= htmlspecialchars($errors['last_name'], ENT_QUOTES, 'UTF-8'); ?></span>
                         <?php endif; ?>
                     </div>
@@ -759,7 +759,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                             </svg>
                         </div>
-                        <?php if (isset($errors['email'])): ?>
+                        <?php if (isset($errors['email'])) : ?>
                             <span class="field-error"><?= htmlspecialchars($errors['email'], ENT_QUOTES, 'UTF-8'); ?></span>
                         <?php endif; ?>
                     </div>
@@ -787,7 +787,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </svg>
                         </div>
                         <span class="helper-text">3-50 alphanumeric characters, underscores, dashes, or periods.</span>
-                        <?php if (isset($errors['username'])): ?>
+                        <?php if (isset($errors['username'])) : ?>
                             <span class="field-error"><?= htmlspecialchars($errors['username'], ENT_QUOTES, 'UTF-8'); ?></span>
                         <?php endif; ?>
                     </div>
@@ -829,7 +829,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <span class="helper-text" id="strengthText">Must contain at least 8 characters.</span>
                         
-                        <?php if (isset($errors['password'])): ?>
+                        <?php if (isset($errors['password'])) : ?>
                             <span class="field-error"><?= htmlspecialchars($errors['password'], ENT_QUOTES, 'UTF-8'); ?></span>
                         <?php endif; ?>
                     </div>
@@ -860,7 +860,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </svg>
                             </button>
                         </div>
-                        <?php if (isset($errors['password_confirm'])): ?>
+                        <?php if (isset($errors['password_confirm'])) : ?>
                             <span class="field-error"><?= htmlspecialchars($errors['password_confirm'], ENT_QUOTES, 'UTF-8'); ?></span>
                         <?php endif; ?>
                     </div>

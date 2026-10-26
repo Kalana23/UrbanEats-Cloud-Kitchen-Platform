@@ -1,4 +1,5 @@
 <?php
+
 /**
  * UrbanEats Cloud Kitchen Platform
  * User Profile Management & Security (PHP 8.x)
@@ -57,7 +58,6 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             $passwordErrors['csrf'] = 'Invalid or expired CSRF token. Please try again.';
         }
     } else {
-        
         // ---------------------------------------------------------------------
         // Form 1: Update Profile Details
         // ---------------------------------------------------------------------
@@ -277,7 +277,7 @@ require_once __DIR__ . '/../includes/header.php';
 
             <div class="card-body">
                 
-                <?php if (!empty($profileSuccess)): ?>
+                <?php if (!empty($profileSuccess)) : ?>
                     <div class="alert alert-success" role="alert">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;">
                             <polyline points="20 6 9 17 4 12"></polyline>
@@ -286,10 +286,10 @@ require_once __DIR__ . '/../includes/header.php';
                     </div>
                 <?php endif; ?>
 
-                <?php if (isset($profileErrors['csrf'])): ?>
+                <?php if (isset($profileErrors['csrf'])) : ?>
                     <div class="alert alert-danger" role="alert"><?= htmlspecialchars($profileErrors['csrf'], ENT_QUOTES, 'UTF-8'); ?></div>
                 <?php endif; ?>
-                <?php if (isset($profileErrors['system'])): ?>
+                <?php if (isset($profileErrors['system'])) : ?>
                     <div class="alert alert-danger" role="alert"><?= htmlspecialchars($profileErrors['system'], ENT_QUOTES, 'UTF-8'); ?></div>
                 <?php endif; ?>
 
@@ -309,7 +309,7 @@ require_once __DIR__ . '/../includes/header.php';
                                 value="<?= htmlspecialchars((string)$currentUser['first_name'], ENT_QUOTES, 'UTF-8'); ?>" 
                                 required
                             >
-                            <?php if (isset($profileErrors['first_name'])): ?>
+                            <?php if (isset($profileErrors['first_name'])) : ?>
                                 <span style="color: var(--danger); font-size: 0.8125rem;"><?= htmlspecialchars($profileErrors['first_name'], ENT_QUOTES, 'UTF-8'); ?></span>
                             <?php endif; ?>
                         </div>
@@ -325,7 +325,7 @@ require_once __DIR__ . '/../includes/header.php';
                                 value="<?= htmlspecialchars((string)$currentUser['last_name'], ENT_QUOTES, 'UTF-8'); ?>" 
                                 required
                             >
-                            <?php if (isset($profileErrors['last_name'])): ?>
+                            <?php if (isset($profileErrors['last_name'])) : ?>
                                 <span style="color: var(--danger); font-size: 0.8125rem;"><?= htmlspecialchars($profileErrors['last_name'], ENT_QUOTES, 'UTF-8'); ?></span>
                             <?php endif; ?>
                         </div>
@@ -342,7 +342,7 @@ require_once __DIR__ . '/../includes/header.php';
                             value="<?= htmlspecialchars((string)$currentUser['email'], ENT_QUOTES, 'UTF-8'); ?>" 
                             required
                         >
-                        <?php if (isset($profileErrors['email'])): ?>
+                        <?php if (isset($profileErrors['email'])) : ?>
                             <span style="color: var(--danger); font-size: 0.8125rem;"><?= htmlspecialchars($profileErrors['email'], ENT_QUOTES, 'UTF-8'); ?></span>
                         <?php endif; ?>
                     </div>
@@ -358,7 +358,7 @@ require_once __DIR__ . '/../includes/header.php';
                             value="<?= htmlspecialchars((string)$currentUser['username'], ENT_QUOTES, 'UTF-8'); ?>" 
                             required
                         >
-                        <?php if (isset($profileErrors['username'])): ?>
+                        <?php if (isset($profileErrors['username'])) : ?>
                             <span style="color: var(--danger); font-size: 0.8125rem;"><?= htmlspecialchars($profileErrors['username'], ENT_QUOTES, 'UTF-8'); ?></span>
                         <?php endif; ?>
                     </div>
@@ -402,7 +402,7 @@ require_once __DIR__ . '/../includes/header.php';
 
             <div class="card-body">
                 
-                <?php if (!empty($passwordSuccess)): ?>
+                <?php if (!empty($passwordSuccess)) : ?>
                     <div class="alert alert-success" role="alert">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;">
                             <polyline points="20 6 9 17 4 12"></polyline>
@@ -411,10 +411,10 @@ require_once __DIR__ . '/../includes/header.php';
                     </div>
                 <?php endif; ?>
 
-                <?php if (isset($passwordErrors['csrf'])): ?>
+                <?php if (isset($passwordErrors['csrf'])) : ?>
                     <div class="alert alert-danger" role="alert"><?= htmlspecialchars($passwordErrors['csrf'], ENT_QUOTES, 'UTF-8'); ?></div>
                 <?php endif; ?>
-                <?php if (isset($passwordErrors['system'])): ?>
+                <?php if (isset($passwordErrors['system'])) : ?>
                     <div class="alert alert-danger" role="alert"><?= htmlspecialchars($passwordErrors['system'], ENT_QUOTES, 'UTF-8'); ?></div>
                 <?php endif; ?>
 
@@ -435,7 +435,7 @@ require_once __DIR__ . '/../includes/header.php';
                                 required
                             >
                         </div>
-                        <?php if (isset($passwordErrors['current_password'])): ?>
+                        <?php if (isset($passwordErrors['current_password'])) : ?>
                             <span style="color: var(--danger); font-size: 0.8125rem;"><?= htmlspecialchars($passwordErrors['current_password'], ENT_QUOTES, 'UTF-8'); ?></span>
                         <?php endif; ?>
                     </div>
@@ -452,7 +452,7 @@ require_once __DIR__ . '/../includes/header.php';
                             minlength="8"
                             required
                         >
-                        <?php if (isset($passwordErrors['new_password'])): ?>
+                        <?php if (isset($passwordErrors['new_password'])) : ?>
                             <span style="color: var(--danger); font-size: 0.8125rem;"><?= htmlspecialchars($passwordErrors['new_password'], ENT_QUOTES, 'UTF-8'); ?></span>
                         <?php endif; ?>
                     </div>
@@ -468,7 +468,7 @@ require_once __DIR__ . '/../includes/header.php';
                             placeholder="Repeat new password"
                             required
                         >
-                        <?php if (isset($passwordErrors['new_password_confirm'])): ?>
+                        <?php if (isset($passwordErrors['new_password_confirm'])) : ?>
                             <span style="color: var(--danger); font-size: 0.8125rem;"><?= htmlspecialchars($passwordErrors['new_password_confirm'], ENT_QUOTES, 'UTF-8'); ?></span>
                         <?php endif; ?>
                     </div>

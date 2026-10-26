@@ -1,8 +1,9 @@
 <?php
+
 /**
  * UrbanEats Cloud Kitchen Platform
  * Password Reset Request Flow (Forgot Password)
- * 
+ *
  * PHP version 8.x
  */
 
@@ -78,10 +79,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
                 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
                 $dir = rtrim(dirname($_SERVER['REQUEST_URI'] ?? '/UrbanEats-Cloud-Kitchen-Platform/public/'), '/\\');
-                
+
                 $generatedResetLink = "reset-password.php?token={$token}";
                 $fullResetUrl = "{$protocol}://{$host}{$dir}/reset-password.php?token={$token}";
-
             } else {
                 $errors['email'] = 'No account was found with that email address. Please check for typos or register.';
             }
@@ -246,8 +246,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         </header>
 
         <!-- Simulated Link Display State -->
-        <?php if ($generatedResetLink !== null): ?>
-            
+        <?php if ($generatedResetLink !== null) : ?>
             <div class="simulation-box">
                 <span class="simulation-badge">Reset Token Generated</span>
                 <p style="color: var(--text-primary); font-size: 0.95rem; margin-bottom: 0.5rem; font-weight: 600;">
@@ -272,13 +271,12 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                 </a>
             </div>
 
-        <?php else: ?>
-
+        <?php else : ?>
             <!-- Alerts -->
-            <?php if (isset($errors['csrf'])): ?>
+            <?php if (isset($errors['csrf'])) : ?>
                 <div class="alert alert-danger" role="alert"><?= htmlspecialchars($errors['csrf'], ENT_QUOTES, 'UTF-8'); ?></div>
             <?php endif; ?>
-            <?php if (isset($errors['system'])): ?>
+            <?php if (isset($errors['system'])) : ?>
                 <div class="alert alert-danger" role="alert"><?= htmlspecialchars($errors['system'], ENT_QUOTES, 'UTF-8'); ?></div>
             <?php endif; ?>
 
@@ -303,7 +301,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                             autofocus
                         >
                     </div>
-                    <?php if (isset($errors['email'])): ?>
+                    <?php if (isset($errors['email'])) : ?>
                         <span style="color: var(--danger); font-size: 0.8125rem; margin-top: 0.35rem; display: block;">
                             <?= htmlspecialchars($errors['email'], ENT_QUOTES, 'UTF-8'); ?>
                         </span>
