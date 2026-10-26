@@ -19,6 +19,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../includes/csrf.php';
 require_once __DIR__ . '/../../includes/auth.php';
+require_once __DIR__ . '/../../includes/coupons.php';
 
 // Ensure session is started safely
 if (session_status() === PHP_SESSION_NONE) {
@@ -205,40 +206,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($currentSubtotal <= 0.0) {
                     add_cart_alert('danger', 'Cannot apply a coupon to an empty cart.');
                 } else {
-                    $couponStmt = $pdo->prepare('
-                        SELECT coupon_id, code, discount_type, discount_value, min_order_amount, 
-                               max_discount_amount, usage_limit, used_count, valid_from, valid_until, is_active
-                        FROM coupons
-                        WHERE code = :code
-                    ');
-                    $couponStmt->execute([':code' => $couponCode]);
-                    $coupon = $couponStmt->fetch(PDO::FETCH_ASSOC);
-
-                    if (!$coupon) {
-                        add_cart_alert('danger', 'Coupon code "' . htmlspecialchars($couponCode, ENT_QUOTES, 'UTF-8') . '" does not exist.');
-                    } elseif ((int)$coupon['is_active'] !== 1) {
-                        add_cart_alert('danger', 'This promotional coupon has been deactivated.');
+                    $validation = validate_coupon($pdo, $couponCode, $currentSubtotal);
+                    if (!$validation['valid']) {
+                        add_cart_alert('danger', $validation['error']);
                     } else {
-                        $now = date('Y-m-d H:i:s');
-                        if ($now < $coupon['valid_from']) {
-                            add_cart_alert('danger', 'This coupon is not valid yet.');
-                        } elseif ($now > $coupon['valid_until']) {
-                            add_cart_alert('danger', 'This coupon has expired.');
-                        } elseif ($coupon['usage_limit'] !== null && (int)$coupon['used_count'] >= (int)$coupon['usage_limit']) {
-                            add_cart_alert('danger', 'This promotional coupon has reached its maximum platform redemption limit.');
-                        } elseif ($currentSubtotal < (float)$coupon['min_order_amount']) {
-                            add_cart_alert('warning', 'Coupon requires a minimum order subtotal of LKR ' . number_format((float)$coupon['min_order_amount'], 2) . '. Add more items to qualify.');
-                        } else {
-                            $_SESSION['applied_coupon'] = [
-                                'coupon_id'           => (int)$coupon['coupon_id'],
-                                'code'                => (string)$coupon['code'],
-                                'discount_type'       => (string)$coupon['discount_type'],
-                                'discount_value'      => (float)$coupon['discount_value'],
-                                'min_order_amount'    => (float)$coupon['min_order_amount'],
-                                'max_discount_amount' => $coupon['max_discount_amount'] !== null ? (float)$coupon['max_discount_amount'] : null,
-                            ];
-                            add_cart_alert('success', 'Coupon "' . htmlspecialchars($coupon['code'], ENT_QUOTES, 'UTF-8') . '" successfully applied!');
-                        }
+                        $_SESSION['applied_coupon'] = $validation['coupon'];
+                        add_cart_alert('success', 'Coupon "' . htmlspecialchars($validation['coupon']['code'], ENT_QUOTES, 'UTF-8') . '" successfully applied! (Discount: LKR ' . number_format($validation['discount_amount'], 2) . ')');
                     }
                 }
             }

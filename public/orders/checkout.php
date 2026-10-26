@@ -23,6 +23,7 @@ require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../includes/csrf.php';
 require_once __DIR__ . '/../../includes/auth.php';
 require_once __DIR__ . '/../../includes/stock.php';
+require_once __DIR__ . '/../../includes/coupons.php';
 
 // Ensure session is active
 if (session_status() === PHP_SESSION_NONE) {
@@ -169,38 +170,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (empty($rawCode)) {
                 $errors['coupon'] = 'Please enter a coupon code to apply.';
             } else {
-                $cStmt = $pdo->prepare('
-                    SELECT coupon_id, code, discount_type, discount_value, min_order_amount, 
-                           max_discount_amount, usage_limit, used_count, valid_from, valid_until, is_active
-                    FROM coupons
-                    WHERE code = :code
-                ');
-                $cStmt->execute([':code' => $rawCode]);
-                $cData = $cStmt->fetch(PDO::FETCH_ASSOC);
-
                 $calc = calculate_totals($_SESSION['cart'], null, $fulfillmentType);
-                $now = date('Y-m-d H:i:s');
+                $validation = validate_coupon($pdo, $rawCode, (float)$calc['subtotal']);
 
-                if (!$cData) {
-                    $errors['coupon'] = 'Coupon code "' . htmlspecialchars($rawCode, ENT_QUOTES, 'UTF-8') . '" is invalid.';
-                } elseif ((int)$cData['is_active'] !== 1) {
-                    $errors['coupon'] = 'This coupon has been disabled.';
-                } elseif ($now < $cData['valid_from'] || $now > $cData['valid_until']) {
-                    $errors['coupon'] = 'This promotional coupon has expired.';
-                } elseif ($cData['usage_limit'] !== null && (int)$cData['used_count'] >= (int)$cData['usage_limit']) {
-                    $errors['coupon'] = 'This coupon has reached its maximum platform redemptions.';
-                } elseif ($calc['subtotal'] < (float)$cData['min_order_amount']) {
-                    $errors['coupon'] = 'Minimum order subtotal of LKR ' . number_format((float)$cData['min_order_amount'], 2) . ' required for this coupon.';
+                if (!$validation['valid']) {
+                    $errors['coupon'] = $validation['error'];
                 } else {
-                    $_SESSION['applied_coupon'] = [
-                        'coupon_id'           => (int)$cData['coupon_id'],
-                        'code'                => (string)$cData['code'],
-                        'discount_type'       => (string)$cData['discount_type'],
-                        'discount_value'      => (float)$cData['discount_value'],
-                        'min_order_amount'    => (float)$cData['min_order_amount'],
-                        'max_discount_amount' => $cData['max_discount_amount'] !== null ? (float)$cData['max_discount_amount'] : null,
+                    $_SESSION['applied_coupon'] = $validation['coupon'];
+                    $feedbackAlert = [
+                        'type'    => 'success', 
+                        'message' => 'Coupon "' . htmlspecialchars($validation['coupon']['code'], ENT_QUOTES, 'UTF-8') . '" applied successfully! Discount: LKR ' . number_format($validation['discount_amount'], 2)
                     ];
-                    $feedbackAlert = ['type' => 'success', 'message' => 'Coupon "' . htmlspecialchars($cData['code'], ENT_QUOTES, 'UTF-8') . '" applied successfully!'];
                 }
             }
         }
@@ -408,12 +388,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     // 6. Increment coupon used_count if applied
                     if ($couponIdToSave !== null) {
-                        $updCoupon = $pdo->prepare('
-                            UPDATE coupons 
-                            SET used_count = used_count + 1 
-                            WHERE coupon_id = :coupon_id
-                        ');
-                        $updCoupon->execute([':coupon_id' => $couponIdToSave]);
+                        increment_coupon_usage($pdo, $couponIdToSave);
                     }
 
                     // 7. Record administrative and security audit log
