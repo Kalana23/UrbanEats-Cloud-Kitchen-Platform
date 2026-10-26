@@ -1,7 +1,7 @@
 {
     "phpcs.enable": true,
-    "phpcs.executablePath": "vendor\\bin\\phpcs.bat",
+    "phpcs.executablePath": "C:\\xampp\\htdocs\\UrbanEats-Cloud-Kitchen-Platform\\vendor\\bin\\phpcs.bat",
     "phpcbf.enable": true,
-    "phpcbf.executablePath": "vendor\\bin\\phpcbf.bat",
-    "phpResolver.phpSnifferCommand": "vendor\\bin\\phpcs.bat"
+    "phpcbf.executablePath": "C:\\xampp\\htdocs\\UrbanEats-Cloud-Kitchen-Platform\\vendor\\bin\\phpcbf.bat",
+    "phpResolver.phpSnifferCommand": "C:\\xampp\\htdocs\\UrbanEats-Cloud-Kitchen-Platform\\vendor\\bin\\phpcs.bat"
 }
