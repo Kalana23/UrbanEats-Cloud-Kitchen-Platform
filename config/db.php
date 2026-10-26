@@ -39,3 +39,6 @@ try {
 
     exit('Database connection error. A technical incident has been logged. Please try again later.');
 }
+
+return $pdo;
+
