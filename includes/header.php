@@ -65,6 +65,7 @@ switch ($userRole) {
 
     case 'Kitchen Staff':
         $navItems = [
+            ['label' => 'Kitchen Queue',   'url' => $webRoot . '/orders/kitchen-queue.php', 'icon' => 'clock'],
             ['label' => 'Stock Dashboard', 'url' => $webRoot . '/menu/stock.php', 'icon' => 'box'],
             ['label' => 'Manage Dishes',   'url' => $webRoot . '/menu/manage-dishes.php', 'icon' => 'dish'],
             ['label' => 'Categories',      'url' => $webRoot . '/menu/manage-categories.php', 'icon' => 'kitchen'],
@@ -74,11 +75,13 @@ switch ($userRole) {
 
     case 'Administrator':
         $navItems = [
+            ['label' => 'Dashboard',       'url' => $webRoot . '/admin/dashboard.php', 'icon' => 'home'],
+            ['label' => 'Sales Reports',   'url' => $webRoot . '/admin/reports.php', 'icon' => 'chart'],
+            ['label' => 'Kitchen Queue',   'url' => $webRoot . '/orders/kitchen-queue.php', 'icon' => 'clock'],
             ['label' => 'Manage Users',    'url' => $webRoot . '/admin/users.php', 'icon' => 'users'],
             ['label' => 'Stock Control',   'url' => $webRoot . '/menu/stock.php', 'icon' => 'box'],
             ['label' => 'Manage Dishes',   'url' => $webRoot . '/menu/manage-dishes.php', 'icon' => 'dish'],
             ['label' => 'Audit Logs',      'url' => $webRoot . '/admin/audit-log.php', 'icon' => 'shield'],
-            ['label' => 'Browse Menu',     'url' => $webRoot . '/menu/list.php', 'icon' => 'receipt'],
         ];
         break;
 
