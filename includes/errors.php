@@ -1,8 +1,9 @@
 <?php
+
 /**
  * UrbanEats Cloud Kitchen Platform
  * Centralized Error & Exception Handler
- * 
+ *
  * PHP version 8.x
  */
 
@@ -33,7 +34,8 @@ ini_set('error_log', URBANEATS_ERROR_LOG);
  * @param string|null $trace Optional stack trace.
  * @return string Reference ID generated for this error instance.
  */
-function log_system_error(string $level, string $message, string $file, int $line, ?string $trace = null): string {
+function log_system_error(string $level, string $message, string $file, int $line, ?string $trace = null): string
+{
     $refId = 'ERR-' . strtoupper(substr(bin2hex(random_bytes(4)), 0, 8));
     $timestamp = date('Y-m-d H:i:s T');
     $clientIp = $_SERVER['REMOTE_ADDR'] ?? 'CLI';
@@ -68,7 +70,8 @@ function log_system_error(string $level, string $message, string $file, int $lin
  * @param string $refId The unique incident reference ID for troubleshooting.
  * @return void
  */
-function render_friendly_error_page(string $refId): void {
+function render_friendly_error_page(string $refId): void
+{
     // Clean any prior output buffers so partial HTML or traces aren't output
     while (ob_get_level() > 0) {
         ob_end_clean();
@@ -216,7 +219,8 @@ function render_friendly_error_page(string $refId): void {
 /**
  * Custom PHP Error Handler.
  */
-function urbaneats_error_handler(int $severity, string $message, string $file, int $line): bool {
+function urbaneats_error_handler(int $severity, string $message, string $file, int $line): bool
+{
     // If error was silenced with @, respect error_reporting
     if (!(error_reporting() & $severity)) {
         return false;
@@ -252,7 +256,8 @@ function urbaneats_error_handler(int $severity, string $message, string $file, i
 /**
  * Custom Exception Handler.
  */
-function urbaneats_exception_handler(Throwable $exception): void {
+function urbaneats_exception_handler(Throwable $exception): void
+{
     $message = sprintf(
         '[%s] %s',
         get_class($exception),
@@ -273,7 +278,8 @@ function urbaneats_exception_handler(Throwable $exception): void {
 /**
  * Shutdown Handler to intercept fatal errors.
  */
-function urbaneats_shutdown_handler(): void {
+function urbaneats_shutdown_handler(): void
+{
     $lastError = error_get_last();
     if ($lastError !== null && in_array($lastError['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true)) {
         $refId = log_system_error(

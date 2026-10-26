@@ -1,8 +1,9 @@
 <?php
+
 /**
  * UrbanEats Cloud Kitchen Platform
  * Sample Configuration File (config.sample.php)
- * 
+ *
  * Instructions:
  * 1. Copy this file to 'config.php' or configure your settings in 'db.php'.
  * 2. Update the credentials below to match your local or production environment.

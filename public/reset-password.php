@@ -1,8 +1,9 @@
 <?php
+
 /**
  * UrbanEats Cloud Kitchen Platform
  * Password Reset Execution (Reset Password via Token)
- * 
+ *
  * PHP version 8.x
  */
 
@@ -92,7 +93,6 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && $validResetRecord) {
             // Rotate CSRF token
             regenerate_csrf_token();
             $resetSuccess = true;
-
         } catch (PDOException $e) {
             error_log('Password reset completion error: ' . $e->getMessage());
             $errors['system'] = 'Failed to update password due to a server error.';
@@ -235,8 +235,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && $validResetRecord) {
         </header>
 
         <!-- Case 1: Successfully Reset -->
-        <?php if ($resetSuccess): ?>
-            
+        <?php if ($resetSuccess) : ?>
             <div class="success-box">
                 <div class="success-icon-wrap">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -253,8 +252,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && $validResetRecord) {
             </div>
 
         <!-- Case 2: Invalid or Expired Token -->
-        <?php elseif (!$validResetRecord): ?>
-
+        <?php elseif (!$validResetRecord) : ?>
             <div class="alert alert-danger" style="display: block; text-align: center; padding: 1.75rem 1.25rem;">
                 <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom: 0.75rem; color: var(--danger);">
                     <circle cx="12" cy="12" r="10"></circle>
@@ -271,12 +269,11 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && $validResetRecord) {
             </div>
 
         <!-- Case 3: Form to Enter New Password -->
-        <?php else: ?>
-
-            <?php if (isset($errors['csrf'])): ?>
+        <?php else : ?>
+            <?php if (isset($errors['csrf'])) : ?>
                 <div class="alert alert-danger" role="alert"><?= htmlspecialchars($errors['csrf'], ENT_QUOTES, 'UTF-8'); ?></div>
             <?php endif; ?>
-            <?php if (isset($errors['system'])): ?>
+            <?php if (isset($errors['system'])) : ?>
                 <div class="alert alert-danger" role="alert"><?= htmlspecialchars($errors['system'], ENT_QUOTES, 'UTF-8'); ?></div>
             <?php endif; ?>
 
@@ -304,7 +301,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && $validResetRecord) {
                         required 
                         autofocus
                     >
-                    <?php if (isset($errors['new_password'])): ?>
+                    <?php if (isset($errors['new_password'])) : ?>
                         <span style="color: var(--danger); font-size: 0.8125rem;"><?= htmlspecialchars($errors['new_password'], ENT_QUOTES, 'UTF-8'); ?></span>
                     <?php endif; ?>
                 </div>
@@ -322,7 +319,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && $validResetRecord) {
                         placeholder="Repeat new password" 
                         required
                     >
-                    <?php if (isset($errors['new_password_confirm'])): ?>
+                    <?php if (isset($errors['new_password_confirm'])) : ?>
                         <span style="color: var(--danger); font-size: 0.8125rem;"><?= htmlspecialchars($errors['new_password_confirm'], ENT_QUOTES, 'UTF-8'); ?></span>
                     <?php endif; ?>
                 </div>

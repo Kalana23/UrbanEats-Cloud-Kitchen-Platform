@@ -1,8 +1,9 @@
 <?php
+
 /**
  * UrbanEats Cloud Kitchen Platform
  * 403 Forbidden - Access Denied Page
- * 
+ *
  * PHP version 8.x
  */
 
@@ -67,11 +68,11 @@ $currentUsername = $_SESSION['username'] ?? $_SESSION['first_name'] ?? 'Guest';
                 <a href="<?= htmlspecialchars($webRoot, ENT_QUOTES, 'UTF-8'); ?>/index.php" class="btn btn-primary">
                     Go to Homepage
                 </a>
-                <?php if ($isLoggedIn): ?>
+                <?php if ($isLoggedIn) : ?>
                     <a href="<?= htmlspecialchars($webRoot, ENT_QUOTES, 'UTF-8'); ?>/logout.php" class="btn btn-outline">
                         Sign In as Different User
                     </a>
-                <?php else: ?>
+                <?php else : ?>
                     <a href="<?= htmlspecialchars($webRoot, ENT_QUOTES, 'UTF-8'); ?>/login.php" class="btn btn-outline">
                         Sign In
                     </a>

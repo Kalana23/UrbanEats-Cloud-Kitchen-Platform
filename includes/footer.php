@@ -113,24 +113,48 @@ $webRoot = $webRoot ?? '/UrbanEats-Cloud-Kitchen-Platform/public';
 <!-- Theme Mode Toggle Script with LocalStorage Persistence -->
 <script>
     (function () {
-        const themeBtn = document.getElementById('themeToggleBtn');
-        
-        // Ensure body is synchronized with root class on load
-        if (document.documentElement.classList.contains('light-mode')) {
-            document.body.classList.add('light-mode');
+        function getSavedTheme() {
+            try {
+                return localStorage.getItem('urbaneats_theme') || 'dark';
+            } catch (e) {
+                return 'dark';
+            }
         }
 
-        if (themeBtn) {
-            themeBtn.addEventListener('click', function () {
-                const isLight = document.body.classList.toggle('light-mode');
-                document.documentElement.classList.toggle('light-mode', isLight);
-                try {
-                    localStorage.setItem('urbaneats_theme', isLight ? 'light' : 'dark');
-                } catch (e) {
-                    // Safe fallback for restricted storage environments
-                }
-            });
+        function setSavedTheme(theme) {
+            try {
+                localStorage.setItem('urbaneats_theme', theme);
+            } catch (e) {}
         }
+
+        function applyTheme(theme) {
+            if (theme === 'light') {
+                document.documentElement.classList.add('light-mode');
+                if (document.body) {
+                    document.body.classList.add('light-mode');
+                }
+            } else {
+                document.documentElement.classList.remove('light-mode');
+                if (document.body) {
+                    document.body.classList.remove('light-mode');
+                }
+            }
+        }
+
+        // Apply immediately
+        applyTheme(getSavedTheme());
+
+        // Attach click listener to all theme toggle buttons
+        const toggleButtons = document.querySelectorAll('.theme-toggle-btn');
+        toggleButtons.forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                const isCurrentlyLight = document.documentElement.classList.contains('light-mode');
+                const targetTheme = isCurrentlyLight ? 'dark' : 'light';
+                applyTheme(targetTheme);
+                setSavedTheme(targetTheme);
+            });
+        });
     })();
 </script>
 

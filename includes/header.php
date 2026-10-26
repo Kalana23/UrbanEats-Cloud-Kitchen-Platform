@@ -110,10 +110,151 @@ switch ($userRole) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Platform Master Stylesheet -->
-    <link rel="stylesheet" href="<?= htmlspecialchars($webRoot, ENT_QUOTES, 'UTF-8'); ?>/css/style.css">
+    <!-- Platform Master Stylesheet with Cache Busting -->
+    <link rel="stylesheet" href="<?= htmlspecialchars($webRoot, ENT_QUOTES, 'UTF-8'); ?>/css/style.css?v=<?= filemtime(__DIR__ . '/../public/css/style.css'); ?>">
 
-    <!-- Anti-FOUC Theme Pre-loader -->
+    <!-- Anti-FOUC Theme Pre-loader & Core Theme Styles -->
+    <style id="urbaneats-theme-core">
+        /* Theme Toggle Button Base */
+        .theme-toggle-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #1a2234;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            color: #f8fafc;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 0;
+            flex-shrink: 0;
+        }
+        .theme-toggle-btn:hover {
+            background: rgba(249, 115, 22, 0.15);
+            border-color: #f97316;
+            color: #f97316;
+            transform: translateY(-1px);
+        }
+        .theme-toggle-btn .theme-icon-sun {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .theme-toggle-btn .theme-icon-moon {
+            display: none !important;
+        }
+
+        /* Mobile Action Cluster */
+        .mobile-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .mobile-actions {
+                display: none !important;
+            }
+            .desktop-theme-toggle {
+                display: inline-flex !important;
+            }
+        }
+
+        /* Light Mode Core Overrides */
+        :root.light-mode,
+        body.light-mode {
+            --primary: #ea580c;
+            --primary-hover: #c2410c;
+            --bg-body: #f8fafc;
+            --bg-surface: #ffffff;
+            --bg-surface-glass: rgba(255, 255, 255, 0.92);
+            --bg-surface-elevated: #f1f5f9;
+            --bg-input: #ffffff;
+            --bg-input-focus: #ffffff;
+            --bg-navbar: rgba(255, 255, 255, 0.95);
+            --border-subtle: rgba(15, 23, 42, 0.08);
+            --border-medium: rgba(15, 23, 42, 0.14);
+            --border-card: rgba(15, 23, 42, 0.09);
+            --border-input: #cbd5e1;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+        }
+
+        body.light-mode {
+            background-color: #f8fafc !important;
+            color: #475569 !important;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(234, 88, 12, 0.05), transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(2, 132, 199, 0.04), transparent 45%) !important;
+        }
+
+        .light-mode .site-header {
+            background: rgba(255, 255, 255, 0.95) !important;
+            border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+        }
+
+        .light-mode .nav-menu-wrapper {
+            background: #ffffff;
+        }
+
+        .light-mode .nav-brand {
+            color: #0f172a;
+        }
+
+        .light-mode .nav-link {
+            color: #475569;
+        }
+
+        .light-mode .nav-link:hover,
+        .light-mode .nav-link.active {
+            color: #ea580c;
+            background: rgba(234, 88, 12, 0.08);
+        }
+
+        .light-mode .card {
+            background-color: #ffffff !important;
+            border-color: rgba(15, 23, 42, 0.09) !important;
+            box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06) !important;
+        }
+
+        .light-mode .theme-toggle-btn {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+            color: #0f172a;
+        }
+        .light-mode .theme-toggle-btn:hover {
+            background: rgba(234, 88, 12, 0.1);
+            border-color: #ea580c;
+            color: #ea580c;
+        }
+        .light-mode .theme-toggle-btn .theme-icon-sun {
+            display: none !important;
+        }
+        .light-mode .theme-toggle-btn .theme-icon-moon {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .light-mode .site-footer {
+            background: #ffffff !important;
+            border-top: 1px solid rgba(15, 23, 42, 0.08) !important;
+        }
+        .light-mode .table th {
+            background: #f1f5f9 !important;
+            color: #0f172a !important;
+        }
+        .light-mode .btn-secondary {
+            background: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+    </style>
+
+    <!-- Immediate Anti-FOUC Theme Pre-loader -->
     <script>
         (function () {
             try {
@@ -144,73 +285,97 @@ switch ($userRole) {
             <span>Urban<span class="highlight">Eats</span></span>
         </a>
 
-        <!-- Navigation & Action Cluster -->
-        <div class="nav-right-cluster">
-            
-            <!-- Dynamic Menu Container -->
-            <nav class="nav-menu-wrapper" id="navMenuWrapper">
-                <ul class="nav-links">
-                    <?php foreach ($navItems as $item) : ?>
-                        <?php
-                            $itemFile = basename(parse_url($item['url'], PHP_URL_PATH) ?? '');
-                            $isActive = ($currentPage === $itemFile);
-                        ?>
-                        <li>
-                            <a href="<?= htmlspecialchars($item['url'], ENT_QUOTES, 'UTF-8'); ?>"
-                               class="nav-link <?= $isActive ? 'active' : ''; ?>">
-                                <?= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8'); ?>
-                            </a>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
+        <!-- Dynamic Menu Container -->
+        <nav class="nav-menu-wrapper" id="navMenuWrapper">
+            <ul class="nav-links">
+                <?php foreach ($navItems as $item) : ?>
+                    <?php
+                        $itemFile = basename(parse_url($item['url'], PHP_URL_PATH) ?? '');
+                        $isActive = ($currentPage === $itemFile);
+                    ?>
+                    <li>
+                        <a href="<?= htmlspecialchars($item['url'], ENT_QUOTES, 'UTF-8'); ?>"
+                           class="nav-link <?= $isActive ? 'active' : ''; ?>">
+                            <?= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8'); ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
 
-                <!-- User Status & Actions -->
-                <div class="nav-user-section">
-                    <?php if ($isLoggedIn) : ?>
-                        <div class="user-identity">
-                            <div class="user-avatar">
-                                <?= strtoupper(substr((string)$userName, 0, 1)); ?>
-                            </div>
-                            <div class="user-meta">
-                                <span class="user-name"><?= htmlspecialchars((string)$userName, ENT_QUOTES, 'UTF-8'); ?></span>
-                                <span class="role-badge <?= $roleBadgeClass; ?>">
-                                    <?= htmlspecialchars($userRole, ENT_QUOTES, 'UTF-8'); ?>
-                                </span>
-                            </div>
+            <!-- User Status & Actions -->
+            <div class="nav-user-section">
+                <?php if ($isLoggedIn) : ?>
+                    <div class="user-identity">
+                        <div class="user-avatar">
+                            <?= strtoupper(substr((string)$userName, 0, 1)); ?>
                         </div>
-                        <a href="<?= htmlspecialchars($webRoot, ENT_QUOTES, 'UTF-8'); ?>/logout.php" class="btn btn-sm btn-danger">
-                            Sign Out
-                        </a>
-                    <?php else : ?>
-                        <span class="role-badge badge-guest">Guest</span>
-                        <a href="<?= htmlspecialchars($webRoot, ENT_QUOTES, 'UTF-8'); ?>/login.php" class="btn btn-sm btn-secondary">
-                            Sign In
-                        </a>
-                        <a href="<?= htmlspecialchars($webRoot, ENT_QUOTES, 'UTF-8'); ?>/register.php" class="btn btn-sm btn-primary">
-                            Register
-                        </a>
-                    <?php endif; ?>
-                </div>
-            </nav>
+                        <div class="user-meta">
+                            <span class="user-name"><?= htmlspecialchars((string)$userName, ENT_QUOTES, 'UTF-8'); ?></span>
+                            <span class="role-badge <?= $roleBadgeClass; ?>">
+                                <?= htmlspecialchars($userRole, ENT_QUOTES, 'UTF-8'); ?>
+                            </span>
+                        </div>
+                    </div>
+                    <a href="<?= htmlspecialchars($webRoot, ENT_QUOTES, 'UTF-8'); ?>/logout.php" class="btn btn-sm btn-danger">
+                        Sign Out
+                    </a>
+                <?php else : ?>
+                    <span class="role-badge badge-guest">Guest</span>
+                    <a href="<?= htmlspecialchars($webRoot, ENT_QUOTES, 'UTF-8'); ?>/login.php" class="btn btn-sm btn-secondary">
+                        Sign In
+                    </a>
+                    <a href="<?= htmlspecialchars($webRoot, ENT_QUOTES, 'UTF-8'); ?>/register.php" class="btn btn-sm btn-primary">
+                        Register
+                    </a>
+                <?php endif; ?>
 
-            <!-- Theme Toggle Button (Sun / Moon) -->
-            <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Light/Dark Theme" title="Toggle Light/Dark Theme">
-                <!-- Sun Icon (Active in Dark Mode) -->
-                <svg class="theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="5"></circle>
-                    <line x1="12" y1="1" x2="12" y2="3"></line>
-                    <line x1="12" y1="21" x2="12" y2="23"></line>
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                    <line x1="1" y1="12" x2="3" y2="12"></line>
-                    <line x1="21" y1="12" x2="23" y2="12"></line>
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                </svg>
-                <!-- Moon Icon (Active in Light Mode) -->
-                <svg class="theme-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                </svg>
+                <!-- Theme Toggle Button (Desktop & Drawer Menu) -->
+                <button type="button" class="theme-toggle-btn desktop-theme-toggle" aria-label="Toggle Light/Dark Theme" title="Toggle Light/Dark Theme">
+                    <!-- Sun Icon (Active in Dark Mode) -->
+                    <span class="theme-icon-sun">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </span>
+                    <!-- Moon Icon (Active in Light Mode) -->
+                    <span class="theme-icon-moon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Mobile Action Cluster (Theme Toggle + Hamburger) -->
+        <div class="mobile-actions">
+            <button type="button" class="theme-toggle-btn mobile-theme-toggle" aria-label="Toggle Light/Dark Theme" title="Toggle Light/Dark Theme">
+                <span class="theme-icon-sun">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </span>
+                <span class="theme-icon-moon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </span>
             </button>
 
             <!-- Mobile Navigation Toggle -->
@@ -219,8 +384,8 @@ switch ($userRole) {
                 <span></span>
                 <span></span>
             </button>
-
         </div>
+
     </div>
 </header>
 

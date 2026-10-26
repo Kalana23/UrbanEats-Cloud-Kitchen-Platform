@@ -1,8 +1,9 @@
 <?php
+
 /**
  * UrbanEats Cloud Kitchen Platform
  * User Logout & Session Termination
- * 
+ *
  * PHP version 8.x
  */
 

@@ -1,8 +1,9 @@
 <?php
+
 /**
  * UrbanEats Cloud Kitchen Platform
  * Administrator Audit Log Viewer
- * 
+ *
  * PHP version 8.x
  */
 
@@ -103,7 +104,8 @@ $recordsStmt->execute();
 $logs = $recordsStmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Helper function to build pagination URLs with active filters preserved
-function build_page_url(int $targetPage, string $searchKeyword, string $actionFilter): string {
+function build_page_url(int $targetPage, string $searchKeyword, string $actionFilter): string
+{
     $query = ['page' => $targetPage];
     if ($searchKeyword !== '') {
         $query['search'] = $searchKeyword;
@@ -159,7 +161,7 @@ require_once __DIR__ . '/../../includes/header.php';
                 <label for="action_type" class="form-label" style="font-size: 0.8125rem;">Filter by Action</label>
                 <select id="action_type" name="action_type" class="form-control">
                     <option value="">All Actions</option>
-                    <?php foreach ($distinctActions as $act): ?>
+                    <?php foreach ($distinctActions as $act) : ?>
                         <option value="<?= htmlspecialchars($act, ENT_QUOTES, 'UTF-8'); ?>" <?= ($actionFilter === $act) ? 'selected' : ''; ?>>
                             <?= htmlspecialchars($act, ENT_QUOTES, 'UTF-8'); ?>
                         </option>
@@ -172,7 +174,7 @@ require_once __DIR__ . '/../../includes/header.php';
                 <button type="submit" class="btn btn-primary" style="height: 42px;">
                     Filter Logs
                 </button>
-                <?php if ($searchKeyword !== '' || $actionFilter !== '' || $page > 1): ?>
+                <?php if ($searchKeyword !== '' || $actionFilter !== '' || $page > 1) : ?>
                     <a href="audit-log.php" class="btn btn-secondary" style="height: 42px;">
                         Reset
                     </a>
@@ -190,7 +192,7 @@ require_once __DIR__ . '/../../includes/header.php';
                 <h2 style="font-size: 1.15rem; margin-bottom: 0.2rem;">Audit Records</h2>
                 <span style="font-size: 0.8125rem; color: var(--text-muted);">
                     Showing <?= count($logs); ?> of <?= number_format($totalRecords); ?> <?= $totalRecords === 1 ? 'event' : 'events'; ?>
-                    <?php if ($totalPages > 1): ?>
+                    <?php if ($totalPages > 1) : ?>
                         &bull; Page <?= $page; ?> of <?= $totalPages; ?>
                     <?php endif; ?>
                 </span>
@@ -214,15 +216,15 @@ require_once __DIR__ . '/../../includes/header.php';
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if (empty($logs)): ?>
+                    <?php if (empty($logs)) : ?>
                         <tr>
                             <td colspan="6" style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
                                 No audit records match your selected criteria.
                             </td>
                         </tr>
-                    <?php else: ?>
-                        <?php foreach ($logs as $row): ?>
-                            <?php 
+                    <?php else : ?>
+                        <?php foreach ($logs as $row) : ?>
+                            <?php
                                 // Color-code badges based on action type
                                 $act = (string)$row['action'];
                                 $badgeStyle = match (true) {
@@ -234,7 +236,7 @@ require_once __DIR__ . '/../../includes/header.php';
                                     str_contains($act, 'REGIST') => 'background: rgba(6,182,212,0.15); color: #38bdf8; border: 1px solid rgba(6,182,212,0.3);',
                                     default => 'background: rgba(249,115,22,0.15); color: #fb923c; border: 1px solid rgba(249,115,22,0.3);',
                                 };
-                            ?>
+    ?>
                             <tr>
                                 <!-- Log ID -->
                                 <td style="font-family: monospace; font-weight: 700; color: var(--text-muted);">
@@ -255,17 +257,17 @@ require_once __DIR__ . '/../../includes/header.php';
 
                                 <!-- User -->
                                 <td>
-                                    <?php if (!empty($row['user_id']) && !empty($row['username'])): ?>
+                                    <?php if (!empty($row['user_id']) && !empty($row['username'])) : ?>
                                         <div style="font-weight: 600; color: var(--text-primary); font-size: 0.875rem;">
                                             <?= htmlspecialchars((string)($row['first_name'] . ' ' . $row['last_name']), ENT_QUOTES, 'UTF-8'); ?>
                                         </div>
                                         <div style="font-size: 0.775rem; color: var(--text-muted); font-family: monospace;">
                                             @<?= htmlspecialchars((string)$row['username'], ENT_QUOTES, 'UTF-8'); ?>
-                                            <?php if (!empty($row['role_name'])): ?>
+                                            <?php if (!empty($row['role_name'])) : ?>
                                                 &bull; <?= htmlspecialchars((string)$row['role_name'], ENT_QUOTES, 'UTF-8'); ?>
                                             <?php endif; ?>
                                         </div>
-                                    <?php else: ?>
+                                    <?php else : ?>
                                         <span style="color: var(--text-muted); font-size: 0.85rem; font-style: italic;">
                                             Guest / System
                                         </span>
@@ -291,7 +293,7 @@ require_once __DIR__ . '/../../includes/header.php';
         </div>
 
         <!-- Pagination Controls -->
-        <?php if ($totalPages > 1): ?>
+        <?php if ($totalPages > 1) : ?>
             <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
                 <div style="font-size: 0.85rem; color: var(--text-muted);">
                     Showing page <strong><?= $page; ?></strong> of <strong><?= $totalPages; ?></strong>
@@ -299,7 +301,7 @@ require_once __DIR__ . '/../../includes/header.php';
 
                 <div style="display: flex; gap: 0.35rem; align-items: center;">
                     <!-- First Page -->
-                    <?php if ($page > 1): ?>
+                    <?php if ($page > 1) : ?>
                         <a href="<?= build_page_url(1, $searchKeyword, $actionFilter); ?>" class="btn btn-sm btn-secondary" title="First Page">
                             &laquo; First
                         </a>
@@ -309,11 +311,11 @@ require_once __DIR__ . '/../../includes/header.php';
                     <?php endif; ?>
 
                     <!-- Numbered Pages (Window of +/- 2) -->
-                    <?php 
+                    <?php
                         $startPage = max(1, $page - 2);
                         $endPage   = min($totalPages, $page + 2);
                     ?>
-                    <?php for ($p = $startPage; $p <= $endPage; $p++): ?>
+                    <?php for ($p = $startPage; $p <= $endPage; $p++) : ?>
                         <a href="<?= build_page_url($p, $searchKeyword, $actionFilter); ?>" 
                            class="btn btn-sm <?= ($p === $page) ? 'btn-primary' : 'btn-secondary'; ?>" 
                            style="min-width: 34px;">
@@ -322,7 +324,7 @@ require_once __DIR__ . '/../../includes/header.php';
                     <?php endfor; ?>
 
                     <!-- Next & Last -->
-                    <?php if ($page < $totalPages): ?>
+                    <?php if ($page < $totalPages) : ?>
                         <a href="<?= build_page_url($page + 1, $searchKeyword, $actionFilter); ?>" class="btn btn-sm btn-secondary" title="Next Page">
                             Next &rsaquo;
                         </a>
