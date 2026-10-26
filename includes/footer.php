@@ -1,8 +1,9 @@
 <?php
+
 /**
  * UrbanEats Cloud Kitchen Platform
  * Shared Layout Footer
- * 
+ *
  * PHP version 8.x
  */
 
@@ -88,21 +89,45 @@ $webRoot = $webRoot ?? '/UrbanEats-Cloud-Kitchen-Platform/public';
 
 <!-- Interactive Mobile Menu Toggle Script -->
 <script>
-    (function() {
+    (function () {
         const toggleBtn = document.getElementById('mobileMenuToggle');
         const navMenu = document.getElementById('navMenuWrapper');
 
         if (toggleBtn && navMenu) {
-            toggleBtn.addEventListener('click', function() {
+            toggleBtn.addEventListener('click', function () {
                 const isOpen = navMenu.classList.toggle('is-open');
                 toggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
             });
 
             // Close mobile menu when clicking outside
-            document.addEventListener('click', function(event) {
+            document.addEventListener('click', function (event) {
                 if (!toggleBtn.contains(event.target) && !navMenu.contains(event.target)) {
                     navMenu.classList.remove('is-open');
                     toggleBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+    })();
+</script>
+
+<!-- Theme Mode Toggle Script with LocalStorage Persistence -->
+<script>
+    (function () {
+        const themeBtn = document.getElementById('themeToggleBtn');
+        
+        // Ensure body is synchronized with root class on load
+        if (document.documentElement.classList.contains('light-mode')) {
+            document.body.classList.add('light-mode');
+        }
+
+        if (themeBtn) {
+            themeBtn.addEventListener('click', function () {
+                const isLight = document.body.classList.toggle('light-mode');
+                document.documentElement.classList.toggle('light-mode', isLight);
+                try {
+                    localStorage.setItem('urbaneats_theme', isLight ? 'light' : 'dark');
+                } catch (e) {
+                    // Safe fallback for restricted storage environments
                 }
             });
         }
