@@ -110,6 +110,26 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     <!-- Platform Stylesheet -->
     <link rel="stylesheet" href="css/style.css">
 
+    <!-- Immediate Anti-FOUC Theme Pre-loader -->
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('urbaneats_theme') === 'light') {
+                    document.documentElement.classList.add('light-mode');
+                    if (document.body) {
+                        document.body.classList.add('light-mode');
+                    } else {
+                        document.addEventListener('DOMContentLoaded', function () {
+                            if (document.body) {
+                                document.body.classList.add('light-mode');
+                            }
+                        });
+                    }
+                }
+            } catch (e) {}
+        })();
+    </script>
+
     <style>
         .auth-wrapper {
             min-height: 100vh;
@@ -226,9 +246,178 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             color: var(--primary);
             font-weight: 700;
         }
+
+        /* Standalone Auth Theme Toggle Top-Right Layout */
+        .auth-top-actions {
+            position: fixed;
+            top: 1.25rem;
+            right: 1.25rem;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+        }
+
+        .auth-nav-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 0.85rem;
+            border-radius: var(--radius-md, 10px);
+            background: var(--bg-surface-elevated, #1a2234);
+            border: 1px solid var(--border-medium, rgba(255, 255, 255, 0.12));
+            color: var(--text-secondary, #94a3b8);
+            font-size: 0.8125rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .auth-nav-home:hover {
+            background: var(--primary-subtle, rgba(249, 115, 22, 0.12));
+            border-color: var(--primary, #f97316);
+            color: var(--primary, #f97316);
+            transform: translateY(-1px);
+        }
+
+        /* Theme Toggle Button Base */
+        .theme-toggle-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: var(--bg-surface-elevated, #1a2234);
+            border: 1px solid var(--border-medium, rgba(255, 255, 255, 0.14));
+            color: var(--text-primary, #f8fafc);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 0;
+            flex-shrink: 0;
+        }
+
+        .theme-toggle-btn:hover {
+            background: rgba(249, 115, 22, 0.15);
+            border-color: #f97316;
+            color: #f97316;
+            transform: translateY(-1px);
+        }
+
+        .theme-toggle-btn .theme-icon-sun {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle-btn .theme-icon-moon {
+            display: none !important;
+        }
+
+        /* Light Mode Theme Overrides */
+        :root.light-mode body,
+        body.light-mode {
+            background-color: #f8fafc !important;
+            color: #475569 !important;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(234, 88, 12, 0.05), transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(2, 132, 199, 0.04), transparent 45%) !important;
+        }
+
+        :root.light-mode .auth-card,
+        body.light-mode .auth-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(15, 23, 42, 0.09);
+            box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08), 0 4px 10px -3px rgba(15, 23, 42, 0.04);
+        }
+
+        :root.light-mode .token-url-box,
+        body.light-mode .token-url-box {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+            color: #0f172a;
+        }
+
+        :root.light-mode .simulation-box,
+        body.light-mode .simulation-box {
+            background: rgba(16, 185, 129, 0.06);
+            border-color: rgba(16, 185, 129, 0.25);
+        }
+
+        :root.light-mode .auth-nav-home,
+        body.light-mode .auth-nav-home {
+            background: #ffffff;
+            border-color: #cbd5e1;
+            color: #475569;
+        }
+
+        :root.light-mode .auth-nav-home:hover,
+        body.light-mode .auth-nav-home:hover {
+            background: rgba(234, 88, 12, 0.08);
+            border-color: #ea580c;
+            color: #ea580c;
+        }
+
+        :root.light-mode .theme-toggle-btn,
+        body.light-mode .theme-toggle-btn {
+            background: #ffffff;
+            border-color: #cbd5e1;
+            color: #0f172a;
+        }
+
+        :root.light-mode .theme-toggle-btn:hover,
+        body.light-mode .theme-toggle-btn:hover {
+            background: rgba(234, 88, 12, 0.1);
+            border-color: #ea580c;
+            color: #ea580c;
+        }
+
+        :root.light-mode .theme-toggle-btn .theme-icon-sun,
+        body.light-mode .theme-toggle-btn .theme-icon-sun {
+            display: none !important;
+        }
+
+        :root.light-mode .theme-toggle-btn .theme-icon-moon,
+        body.light-mode .theme-toggle-btn .theme-icon-moon {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
+
+<!-- Standalone Light/Dark Theme Toggle & Top Navigation -->
+<div class="auth-top-actions">
+    <a href="index.php" class="auth-nav-home" title="Return to Home">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        <span>Home</span>
+    </a>
+    <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Light/Dark Theme" title="Toggle Light/Dark Theme">
+        <!-- Sun Icon (Active in Dark Mode) -->
+        <span class="theme-icon-sun">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+        </span>
+        <!-- Moon Icon (Active in Light Mode) -->
+        <span class="theme-icon-moon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </span>
+    </button>
+</div>
 
 <main class="auth-wrapper">
     <div class="auth-card">
@@ -321,6 +510,54 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 
     </div>
 </main>
+
+<!-- Theme Mode Toggle Script with LocalStorage Persistence -->
+<script>
+    (function () {
+        function getSavedTheme() {
+            try {
+                return localStorage.getItem('urbaneats_theme') || 'dark';
+            } catch (e) {
+                return 'dark';
+            }
+        }
+
+        function setSavedTheme(theme) {
+            try {
+                localStorage.setItem('urbaneats_theme', theme);
+            } catch (e) {}
+        }
+
+        function applyTheme(theme) {
+            if (theme === 'light') {
+                document.documentElement.classList.add('light-mode');
+                if (document.body) {
+                    document.body.classList.add('light-mode');
+                }
+            } else {
+                document.documentElement.classList.remove('light-mode');
+                if (document.body) {
+                    document.body.classList.remove('light-mode');
+                }
+            }
+        }
+
+        // Apply immediately
+        applyTheme(getSavedTheme());
+
+        // Attach click listener to all theme toggle buttons
+        const toggleButtons = document.querySelectorAll('.theme-toggle-btn');
+        toggleButtons.forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                const isCurrentlyLight = document.documentElement.classList.contains('light-mode');
+                const targetTheme = isCurrentlyLight ? 'dark' : 'light';
+                applyTheme(targetTheme);
+                setSavedTheme(targetTheme);
+            });
+        });
+    })();
+</script>
 
 </body>
 </html>
